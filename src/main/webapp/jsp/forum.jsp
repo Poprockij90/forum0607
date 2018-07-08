@@ -1,3 +1,6 @@
+<%@ page import="myObjects.Message" %>
+<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Market
@@ -11,7 +14,18 @@
     <title>forum</title>
 </head>
 <body>
+<h1>Сообщеньки </h1>
 
-<h1>Hi ${forumLogin} </h1>
+
+<c:forEach items="${chat}" var="item">
+    ${item}<br>
+    </c:forEach>
+
+<form action="/forum" method="post">
+    ${sessionScope.get("forumLogin")}
+    <input type="text" name="text">
+    <input type="submit" value="отправить">
+    <p>тут будет дата</p>
+</form>
 </body>
 </html>

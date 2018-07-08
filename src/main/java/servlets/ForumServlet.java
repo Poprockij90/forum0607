@@ -1,6 +1,7 @@
 package servlets;
 
 import myObjects.Message;
+import org.omg.CORBA.Request;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,41 +18,27 @@ public class ForumServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String servLogin=req.getParameter(JSP_LOGIN);
         if ("".equals(servLogin)|| servLogin==null){
             servLogin="без имени";
         }
-        req.setAttribute("forumLogin",servLogin);
+        HttpSession session=req.getSession();
+        session.setAttribute("forumLogin", servLogin);
+        String sessionLog= (String) session.getAttribute("forumLogin");
+//РАЗОБРАТЬСЯ КАК ИЗ СЕССИЙ ДОСТАТЬ ИМЯ
+        req.setAttribute("sessionLog",sessionLog);
         req.getServletContext().getRequestDispatcher("/jsp/forum.jsp").forward(req,resp);
-//        HttpSession session=req.getSession();
-//        session.setAttribute("forumLogin", servLogin);
     }
-//HttpSession session = req.getSession();
-//
-//String nick = (String) session.getAttribute("nick-session-param");
-////todo нормальная проверка
-//if("".equals(nick) || nick == null) {
-//nick = req.getParameter("nick-param");
-//if ("".equals(nick) || nick == null) {
-//
-//nick = "анонимус";
-//}
-//session.setAttribute("nick-session-param", nick);
-//}
-//    @Override
-//    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String nick=req.getParameter("login");
-//        HttpSession session=req.getSession();
-//        String login=(String) session.getAttribute("login");
-//        session.setAttribute("session_login",login);
-//       req.setAttribute("forumLogin",nick);
-//       req.getServletContext().getRequestDispatcher("/jsp/forum.jsp").forward(req,resp);
-//        System.out.println(req.getAttribute("forumLogin"));
-//
-//    }
 
 
-
-
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session=req.getSession();
+        String sessionLog= (String) session.getAttribute("forumLogin");
+        String text=req.getParameter("text");
+        Message message=new Message(sessionLog,text);
+        chat.add(message);
+        req.setAttribute("chat",chat);
+        req.getServletContext().getRequestDispatcher("/jsp/forum.jsp").forward(req,resp);
+}
 }
