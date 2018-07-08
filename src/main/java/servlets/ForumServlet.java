@@ -13,15 +13,19 @@ import java.util.List;
 public class ForumServlet extends HttpServlet {
     private static final String JSP_LOGIN="login";
     private static final String JSP_PASS="pass";
-    protected List<Message> chat = new ArrayList<>();
+    private List<Message> chat = new ArrayList<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String login=req.getParameter("login");
-        req.setAttribute("forumLogin",login);
+
+        String servLogin=req.getParameter(JSP_LOGIN);
+        if ("".equals(servLogin)|| servLogin==null){
+            servLogin="без имени";
+        }
+        req.setAttribute("forumLogin",servLogin);
         req.getServletContext().getRequestDispatcher("/jsp/forum.jsp").forward(req,resp);
 //        HttpSession session=req.getSession();
-//        session.setAttribute("forumLogin", login);
+//        session.setAttribute("forumLogin", servLogin);
     }
 //HttpSession session = req.getSession();
 //

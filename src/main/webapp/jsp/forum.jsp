@@ -12,6 +12,6 @@
 </head>
 <body>
 
-<h1>Hi ${} </h1>
+<h1>Hi ${forumLogin} </h1>
 </body>
 </html>
